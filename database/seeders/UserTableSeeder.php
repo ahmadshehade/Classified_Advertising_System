@@ -22,5 +22,7 @@ class UserTableSeeder extends Seeder
             'password'=>Hash::make('123123123'),
             'role'=>'admin'
          ]);
+
+         User::factory(22)->create();
     }
 }

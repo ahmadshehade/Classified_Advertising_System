@@ -12,7 +12,7 @@ class AdsStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-         return auth('api')->check() && in_array(auth('api')->user()->role, ['admin', 'user']);
+        return auth('api')->check() && in_array(auth('api')->user()->role, ['admin', 'user']);
     }
 
     /**
@@ -42,7 +42,7 @@ class AdsStoreRequest extends FormRequest
             'title.required' => 'The title field is required.',
             'title.string' => 'The title must be a string.',
             'title.max' => 'The title must not exceed 255 characters.',
-            'title.unique'=>'The title must be unique',
+            'title.unique' => 'The title must be unique',
 
             'description.string' => 'The description must be a string.',
 
@@ -55,10 +55,10 @@ class AdsStoreRequest extends FormRequest
 
             'status.in' => 'The status must be one of: pending, active, rejected.',
 
-          'images.array' => 'The images must be an array.',
-        'images.*.image' => 'Each file must be an image.',
-        'images.*.mimes' => 'Each image must be a file of type: jpeg, png, jpg, gif, svg.',
-        'images.*.max' => 'Each image may not be greater than 2MB.',
+            'images.array' => 'The images must be an array.',
+            'images.*.image' => 'Each file must be an image.',
+            'images.*.mimes' => 'Each image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'images.*.max' => 'Each image may not be greater than 2MB.',
         ];
     }
 

@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             UserTableSeeder::class,
-            CategoryTableSeeder::class
+            CategoryTableSeeder::class,
+            AdsTableSeeder::class,
+            ReviewTableSeeder::class
         ]);
     }
 }

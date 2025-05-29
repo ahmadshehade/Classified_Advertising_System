@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class AdsService implements AdsInterface
 {
     use AuthorizesRequests, ManagmentFiles;
-   
+
     /**
      * Summary of index
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
@@ -26,13 +26,18 @@ class AdsService implements AdsInterface
     public function index()
     {
         $this->authorize('viewAny', Ads::class);
+
         if (auth('api')->user()->role == "admin") {
             $ads = Cache::remember('ads.all', now()->addMinutes(60), function () {
                 return Ads::withRelations()->get();
             });
         } elseif (auth('api')->user()->role == "user") {
-            $ads = Cache::remember('ads.active', now()->addMinutes(60), function () {
-                return Ads::withRelations()->active()->get();
+            $ads = Cache::remember('ads.active.visits', now()->addMinutes(60), function () {
+                return Ads::withRelations()
+                    ->active()
+                    ->orderByDesc('reviews_count')
+                    ->take(5)
+                    ->get();
             });
         } else {
             throw new HttpResponseException(
@@ -48,6 +53,7 @@ class AdsService implements AdsInterface
             'code' => 200,
         ];
     }
+
 
     /**
      * Summary of store
@@ -162,13 +168,13 @@ class AdsService implements AdsInterface
                 if ($ads->isDirty('status')) {
                     dispatch(new UpdateAdsJob($ads));
                 }
-            }else{
-               dispatch(new UserUpdateInfoJob($ads));
+            } else {
+                dispatch(new UserUpdateInfoJob($ads));
             }
             $ads->save();
 
             Cache::forget('ads.all');
-            Cache::forget('ads.active');
+            Cache::forget('ads.active.visits');
             if ($request->hasFile('newImages')) {
                 if ($ads->images->count() > 0) {
                     $imagesId = $ads->images()->pluck('id')->toArray();

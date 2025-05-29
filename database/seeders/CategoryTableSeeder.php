@@ -35,5 +35,7 @@ class CategoryTableSeeder extends Seeder
                 'slug' => Str::slug($name) . '-' . uniqid()
             ]);
         }
+
+        Category::factory(12)->create();
     }
 }

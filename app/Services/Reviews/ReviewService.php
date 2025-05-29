@@ -4,10 +4,13 @@ namespace App\Services\Reviews;
 
 use App\Interfaces\Reviews\ReviewInterface;
 use App\Jobs\Review\MakeReview;
+use App\Models\Ads;
 use App\Models\Review;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ReviewService implements ReviewInterface
 {
@@ -37,6 +40,7 @@ class ReviewService implements ReviewInterface
     public function store($request)
     {
         try {
+           
             $validated = $request->validated();
             $this->authorize('create', Review::class);
             $review = new Review();
@@ -45,14 +49,17 @@ class ReviewService implements ReviewInterface
             $review->comment = $validated['comment'];
             $review->user_id = auth('api')->id();
             $review->save();
+            Cache::forget('ads.all');
+            Cache::forget('ads.active.visits');
             dispatch(new MakeReview($review));
-
+               
             return [
                 'message' => 'Successfully created new review.',
                 'data' => $review,
                 'code' => 201
             ];
         } catch (Exception $e) {
+          
             throw new HttpResponseException(
                 response()->json([
                     'message' => $e->getMessage(),
@@ -114,6 +121,8 @@ class ReviewService implements ReviewInterface
         }
         $this->authorize('delete', $review);
         $review->delete();
+         Cache::forget('ads.all');
+         Cache::forget('ads.active.visits');
 
         return [
             'message' => 'Successfully deleted review.',
