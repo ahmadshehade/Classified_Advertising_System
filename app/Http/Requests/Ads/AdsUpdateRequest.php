@@ -4,12 +4,13 @@ namespace App\Http\Requests\Ads;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class AdsUpdateRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return auth('api')->user()->role == "admin" || auth('api')->user()->role == "user";
+         return auth('api')->check() && in_array(auth('api')->user()->role, ['admin', 'user']);
     }
 
     /**
@@ -19,8 +20,9 @@ class AdsUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $adId=$this->route('id');
         return [
-            'title' => 'sometimes|string|max:255',
+            'title' => ['sometimes','string','max:255',Rule::unique('ads')->ignore($adId)],
             'description' => 'nullable|string',
             'price' => 'sometimes|numeric|min:0',
             'category_id' => 'sometimes|exists:categories,id',
@@ -38,6 +40,7 @@ class AdsUpdateRequest extends FormRequest
         return [
             'title.string' => 'The title must be a string.',
             'title.max' => 'The title must not exceed 255 characters.',
+            'title.unique'=>'The title must be unique ',
 
             'description.string' => 'The description must be a string.',
 

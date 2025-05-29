@@ -12,7 +12,7 @@ class AdsStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth('api')->user()->role == "admin" || auth('api')->user()->role == "user";
+         return auth('api')->check() && in_array(auth('api')->user()->role, ['admin', 'user']);
     }
 
     /**
@@ -23,7 +23,7 @@ class AdsStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:ads,title',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
@@ -42,6 +42,7 @@ class AdsStoreRequest extends FormRequest
             'title.required' => 'The title field is required.',
             'title.string' => 'The title must be a string.',
             'title.max' => 'The title must not exceed 255 characters.',
+            'title.unique'=>'The title must be unique',
 
             'description.string' => 'The description must be a string.',
 
