@@ -2,11 +2,11 @@
 
 namespace App\Services\Ads;
 
-use App\Interfaces\Ads\AdsInterface;
+use App\Interfaces\Ads\AdInterface;
 use App\Jobs\NewAdsJob;
 use App\Jobs\UpdateAdsJob;
 use App\Jobs\UserUpdateInfoJob;
-use App\Models\Ads;
+use App\Models\Ad;
 use App\Traits\ManagmentFiles;
 use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -14,7 +14,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-class AdsService implements AdsInterface
+class AdService implements AdInterface
 {
     use AuthorizesRequests, ManagmentFiles;
 
@@ -25,15 +25,15 @@ class AdsService implements AdsInterface
      */
     public function index()
     {
-        $this->authorize('viewAny', Ads::class);
+        $this->authorize('viewAny', Ad::class);
 
         if (auth('api')->user()->role == "admin") {
             $ads = Cache::remember('ads.all', now()->addMinutes(60), function () {
-                return Ads::withRelations()->get();
+                return Ad::withRelations()->get();
             });
         } elseif (auth('api')->user()->role == "user") {
             $ads = Cache::remember('ads.active.visits', now()->addMinutes(60), function () {
-                return Ads::withRelations()
+                return Ad::withRelations()
                     ->active()
                     ->orderByDesc('reviews_count')
                     ->take(5)
@@ -59,15 +59,15 @@ class AdsService implements AdsInterface
      * Summary of store
      * @param mixed $request
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     * @return array{code: int, data: Ads, message: string}
+     * @return array{code: int, data: Ad, message: string}
      */
     public function store($request)
     {
         try {
             DB::beginTransaction();
             $validate = $request->validated();
-            $this->authorize('create', Ads::class);
-            $ads = new Ads();
+            $this->authorize('create', Ad::class);
+            $ads = new Ad();
             $ads->title = $validate['title'];
             $ads->description = $validate['description'];
             $ads->price = $validate['price'];
@@ -82,7 +82,7 @@ class AdsService implements AdsInterface
             $this->uploadImages(
                 $request,
                 'images',
-                Ads::class,
+                Ad::class,
                 $ads->id,
                 'Ads/' . $ads->title . '_' . $ads->id
             );
@@ -109,11 +109,11 @@ class AdsService implements AdsInterface
      * Summary of show
      * @param mixed $id
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     * @return array{code: int, data: Ads|mixed, message: string}
+     * @return array{code: int, data: Ad|mixed, message: string}
      */
     public function show($id)
     {
-        $ads = Ads::withRelations()->find($id);
+        $ads = Ad::withRelations()->find($id);
         if (!$ads) {
             throw new HttpResponseException(
                 response()->json([
@@ -135,14 +135,14 @@ class AdsService implements AdsInterface
      * @param mixed $id
      * @param mixed $request
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     * @return array{code: int, data: Ads|mixed, message: string}
+     * @return array{code: int, data: Ad|mixed, message: string}
      */
     public function update($id, $request)
     {
         try {
             DB::beginTransaction();
             $validate = $request->validated();
-            $ads = Ads::find($id);
+            $ads = Ad::find($id);
             if (!$ads) {
                 throw new HttpResponseException(
                     response()->json([
@@ -173,13 +173,12 @@ class AdsService implements AdsInterface
             }
             $ads->save();
 
-            Cache::forget('ads.all');
-            Cache::forget('ads.active.visits');
+
             if ($request->hasFile('newImages')) {
                 if ($ads->images->count() > 0) {
                     $imagesId = $ads->images()->pluck('id')->toArray();
                     $this->deleteImages(
-                        Ads::class,
+                        Ad::class,
                         $ads->id,
                         $imagesId
                     );
@@ -187,7 +186,7 @@ class AdsService implements AdsInterface
                 $this->uploadImages(
                     $request,
                     'newImages',
-                    Ads::class,
+                    Ad::class,
                     $ads->id,
                     'Ads/' . $ads->title . '_' . $ads->id
                 );
@@ -217,7 +216,7 @@ class AdsService implements AdsInterface
      */
     public function destroy($id)
     {
-        $ads = Ads::find($id);
+        $ads = Ad::find($id);
         if (!$ads) {
             throw new HttpResponseException(
                 response()->json([
@@ -229,12 +228,14 @@ class AdsService implements AdsInterface
         if ($ads->images->count() > 0) {
             $imagesId = $ads->images()->pluck('id')->toArray();
             $this->deleteImages(
-                Ads::class,
+                Ad::class,
                 $ads->id,
                 $imagesId
             );
         }
         $ads->delete();
+        Cache::forget('ads.all');
+        Cache::forget('ads.active');
         Cache::forget('ads.all');
         Cache::forget('ads.active');
         $data = [
@@ -247,13 +248,13 @@ class AdsService implements AdsInterface
     /**
      * Summary of filter
      * @param array $filters
-     * @return array{code: int, data: \Illuminate\Database\Eloquent\Collection<int, Ads>, message: string}
+     * @return array{code: int, data: \Illuminate\Database\Eloquent\Collection<int, Ad>, message: string}
      */
     public function filter(array $filters)
     {
-        $this->authorize('viewAny', Ads::class);
+        $this->authorize('viewAny', Ad::class);
 
-        $ads = Ads::withRelations();
+        $ads = Ad::withRelations();
 
         if (!empty($filters['user_id'])) {
             $ads = $ads->whereHas('user', function ($query) use ($filters) {

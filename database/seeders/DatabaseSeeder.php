@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserTableSeeder::class,
             CategoryTableSeeder::class,
-            AdsTableSeeder::class,
+            AdTableSeeder::class,
             ReviewTableSeeder::class
         ]);
     }

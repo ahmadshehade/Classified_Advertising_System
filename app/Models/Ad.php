@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Ads extends Model
+class Ad extends Model
 {
-       use HasFactory,Notifiable;
+    use HasFactory, Notifiable;
 
     protected  $table = "ads";
 
@@ -18,7 +18,7 @@ class Ads extends Model
         'price',
         'category_id',
         'status',
-      
+
     ];
 
 
@@ -26,7 +26,7 @@ class Ads extends Model
 
     /**
      * Summary of user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Ads>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<User, Ad>
      */
     public function user()
     {
@@ -34,7 +34,7 @@ class Ads extends Model
     }
     /**
      * Summary of category
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category, Ads>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Category, Ad>
      */
     public function category()
     {
@@ -42,7 +42,7 @@ class Ads extends Model
     }
     /**
      * Summary of images
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Image, Ads>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<Image, Ad>
      */
     public function  images()
     {
@@ -87,7 +87,7 @@ class Ads extends Model
     }
     /**
      * Summary of loadRelations
-     * @return Ads
+     * @return Ad
      */
     public function loadRelations()
     {
@@ -95,7 +95,7 @@ class Ads extends Model
     }
     /**
      * Summary of reviews
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Review, Ads>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Review, Ad>
      */
     public function reviews()
     {
@@ -103,7 +103,7 @@ class Ads extends Model
     }
     /**
      * Summary of mainImage
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<Image, Ads>
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne<Image, Ad>
      */
     public function mainImage()
     {

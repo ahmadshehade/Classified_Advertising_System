@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Ads;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ads\AdsStoreRequest;
 use App\Http\Requests\Ads\AdsUpdateRequest;
-use App\Interfaces\Ads\AdsInterface;
+use App\Interfaces\Ads\AdInterface;
 use Illuminate\Http\Request;
 
-class AdsController extends Controller
+class AdController extends Controller
 {
     protected  $ads;
 
     /**
      * Summary of __construct
-     * @param \App\Interfaces\Ads\AdsInterface $ads
+     * @param \App\Interfaces\Ads\AdInterface $ads
      */
-    public function __construct(AdsInterface  $ads)
+    public function __construct(AdInterface  $ads)
     {
         $this->ads = $ads;
     }

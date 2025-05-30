@@ -31,9 +31,9 @@ class Review extends Model
     }
     /**
      * Summary of ad
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Ads, Review>
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<Ad, Review>
      */
     public function ad(){
-        return  $this->belongsTo(Ads::class,'ad_id','id');
+        return  $this->belongsTo(Ad::class,'ad_id','id');
     }
 }

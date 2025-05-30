@@ -17,11 +17,11 @@ class Category extends Model
     ];
 
     /**
-     * Summary of asd
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Ads, Category>
+     * Summary of Ad
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Ad, Category>
      */
-    public function asd()
+    public function ad()
     {
-        return $this->hasMany(Ads::class, 'category_id', 'id');
+        return $this->hasMany(Ad::class, 'category_id', 'id');
     }
 }

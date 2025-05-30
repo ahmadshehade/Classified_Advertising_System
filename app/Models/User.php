@@ -58,11 +58,11 @@ class User extends Authenticatable
     }
     /**
      * Summary of ads
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Ads, User>
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Ad, User>
      */
     public function ads()
     {
-        return $this->hasMany(Ads::class, 'user_id', 'id');
+        return $this->hasMany(Ad::class, 'user_id', 'id');
     }
     /**
      * Summary of reviews

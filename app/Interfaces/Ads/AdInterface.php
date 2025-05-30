@@ -2,7 +2,7 @@
 
 namespace App\Interfaces\Ads;
 
-interface AdsInterface{
+interface AdInterface{
 
     public function index();
 

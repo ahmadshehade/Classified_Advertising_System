@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Ads;
+use App\Models\Ad;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AdsTableSeeder extends Seeder
+class AdTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Ads::factory(50)->create();
+        Ad::factory(50)->create();
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Ads\AdsController;
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Categories\CategoryConroller;
-use App\Http\Controllers\Review\ReviewController;
-use App\Http\Controllers\User\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AdController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\CategoryConroller;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -37,12 +36,12 @@ Route::middleware(['auth:api'])->group(function(){
 
      //ads
 
-     Route::post('make/ads',[AdsController::class,'store']);
-     Route::post('update/ads/{id}',[AdsController::class,'update']);
-     Route::get('get/all/ads',[AdsController::class,'index']);
-     Route::get('get/ads/{id}',[AdsController::class,'show']);
-     Route::delete('delete/ads/{id}',[AdsController::class,'destroy']);
-     Route::get('ads/filter', [AdsController::class, 'filter']);
+     Route::post('make/ads',[AdController::class,'store']);
+     Route::post('update/ads/{id}',[AdController::class,'update']);
+     Route::get('get/all/ads',[AdController::class,'index']);
+     Route::get('get/ads/{id}',[AdController::class,'show']);
+     Route::delete('delete/ads/{id}',[AdController::class,'destroy']);
+     Route::get('ads/filter', [AdController::class, 'filter']);
 
      //Review
 
