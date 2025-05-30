@@ -20,8 +20,8 @@ class AdFactory extends Factory
             'title' => $this->faker->sentence(6),
             'description' => $this->faker->paragraph(3),
             'price' => $this->faker->randomFloat(2, 10, 5000),
-            'user_id' => User::factory(),
-            'category_id' => Category::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
+            'category_id' => Category::inRandomOrder()->first()->id,
             'status' => $this->faker->randomElement(['pending', 'active', 'rejected']),
             
             'created_at' => now(),

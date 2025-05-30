@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class CategoryTableSeeder extends Seeder
@@ -15,7 +16,9 @@ class CategoryTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->delete();
+        Schema::disableForeignKeyConstraints();  
+       DB::table('categories')->truncate();        
+        Schema::enableForeignKeyConstraints();
         $categories = [
             'Real Estate',
             'Cars',
@@ -35,7 +38,8 @@ class CategoryTableSeeder extends Seeder
                 'slug' => Str::slug($name) . '-' . uniqid()
             ]);
         }
-
-        Category::factory(12)->create();
+       
+        Category::factory(15)->create();
+    
     }
 }

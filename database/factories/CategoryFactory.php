@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
           $name = $this->faker->unique()->words(2, true);
         return [
               'name' => $name,
-            'slug' => Str::slug($name), // مثال: "digital-cameras"
+            'slug' => Str::slug($name), 
             'created_at' => now(),
             'updated_at' => now(),
         ];

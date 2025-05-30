@@ -6,7 +6,7 @@ use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
+
 use Illuminate\Queue\SerializesModels;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;

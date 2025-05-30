@@ -3,15 +3,17 @@
 namespace App\Jobs;
 
 use App\Mail\NewAdsMail;
-use App\Models\User;
-use Illuminate\Queue\SerializesModels;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class NewAdsJob implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Dispatchable, Queueable, SerializesModels;
 
     protected $ads;
     /**
@@ -27,8 +29,16 @@ class NewAdsJob implements ShouldQueue
      */
     public function handle(): void
     {
-
-
-        Mail::to($this->ads->user->email)->send(new NewAdsMail($this->ads));
+        try {
+            Mail::to($this->ads->user->email)->send(new NewAdsMail($this->ads));
+        } catch (Exception  $e) {
+            Log::error(
+                'Sen Email Error',
+                [
+                    'user' => $this->ads->user,
+                    'error' => $e->getMessage()
+                ]
+            );
+        }
     }
 }

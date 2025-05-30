@@ -106,13 +106,7 @@ class UserService implements UserInterface
 
 
 
-    /**
-     * Summary of update
-     * @param mixed $id
-     * @param mixed $request
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     * @return array{code: int, data: User|\Illuminate\Database\Eloquent\Collection<int, User>, message: string}
-     */
+ 
     public function update($id, $request)
     {
         try {

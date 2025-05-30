@@ -3,7 +3,9 @@
 namespace App\Services\Ads;
 
 use App\Interfaces\Ads\AdInterface;
+
 use App\Jobs\NewAdsJob;
+use App\Jobs\SendAdConfirmationEmail;
 use App\Jobs\UpdateAdsJob;
 use App\Jobs\UserUpdateInfoJob;
 use App\Models\Ad;
@@ -78,7 +80,7 @@ class AdService implements AdInterface
             }
             $ads->save();
             Cache::forget('ads.all');
-            Cache::forget('ads.active');
+            Cache::forget('ads.active.visits');
             $this->uploadImages(
                 $request,
                 'images',
@@ -88,7 +90,7 @@ class AdService implements AdInterface
             );
             DB::commit();
             if ($ads->wasRecentlyCreated) {
-                dispatch(new NewAdsJob($ads));
+                dispatch(new  NewAdsJob($ads));
             }
             $data = [
                 'message' => 'Successfully create Ads',
@@ -172,6 +174,8 @@ class AdService implements AdInterface
                 dispatch(new UserUpdateInfoJob($ads));
             }
             $ads->save();
+            Cache::forget('ads.all');
+            Cache::forget('ads.active.visits');
 
 
             if ($request->hasFile('newImages')) {
@@ -235,9 +239,8 @@ class AdService implements AdInterface
         }
         $ads->delete();
         Cache::forget('ads.all');
-        Cache::forget('ads.active');
-        Cache::forget('ads.all');
-        Cache::forget('ads.active');
+        Cache::forget('ads.active.visits');
+
         $data = [
             'message' => 'Successfully Deleted Ads',
             'data' => true,

@@ -3,9 +3,11 @@
 namespace App\Jobs;
 
 use App\Mail\EndRegisterMail;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendRegisterEmailJob implements ShouldQueue
@@ -27,11 +29,18 @@ class SendRegisterEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->user->email)->send(
+      try{
+             Mail::to($this->user->email)->send(
             new EndRegisterMail(
                 $this->user,
                 $this->password
             )
         );
+      }catch(Exception  $e){
+           Log::error('Failed to send registration email', [
+            'user' => $this->user,
+            'error' => $e->getMessage()
+        ]);
+      }
     }
 }

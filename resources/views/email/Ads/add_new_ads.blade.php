@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <title>New Advertisement Added</title>
@@ -10,6 +11,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 700px;
             margin: 40px auto;
@@ -18,25 +20,30 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
+
         .header {
             background-color: #0d6efd;
             color: #fff;
             padding: 20px 30px;
         }
+
         .header h1 {
             margin: 0;
             font-size: 24px;
             user-select: none;
         }
+
         .content {
             padding: 30px;
             color: #333;
             line-height: 1.6;
             font-size: 16px;
         }
+
         .content p {
             margin-bottom: 20px;
         }
+
         .content h3 {
             margin-top: 0;
             margin-bottom: 15px;
@@ -44,6 +51,7 @@
             font-weight: 700;
             font-size: 20px;
         }
+
         .badge {
             display: inline-block;
             padding: 5px 14px;
@@ -53,16 +61,20 @@
             color: white;
             user-select: none;
         }
+
         .badge-pending {
             background-color: #ffc107;
             color: #000;
         }
+
         .badge-active {
             background-color: #28a745;
         }
+
         .badge-rejected {
             background-color: #dc3545;
         }
+
         .btn {
             display: inline-block;
             padding: 12px 24px;
@@ -75,9 +87,11 @@
             user-select: none;
             transition: background-color 0.3s ease;
         }
+
         .btn:hover {
             background-color: #084cdf;
         }
+
         .footer {
             text-align: center;
             font-size: 13px;
@@ -88,6 +102,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -105,12 +120,12 @@
             <p><strong>Price:</strong> ${{ $ads->price }}</p>
 
             <p><strong>Status:</strong>
-                <span class="badge badge-{{ strtolower($ads->status) }}">
-                    {{ ucfirst($ads->status) }}
+                <span class="badge badge-{{ $ads->status ? strtolower($ads->status) : 'pending' }}">
+                    {{ $ads->status ? ucfirst($ads->status) : 'Pending' }}
                 </span>
             </p>
 
-            <a href="{{ url('/ads/'.$ads->id) }}" class="btn" target="_blank" rel="noopener noreferrer">
+            <a href="{{ url('/ads/' . $ads->id) }}" class="btn" target="_blank" rel="noopener noreferrer">
                 View Advertisement
             </a>
         </div>
@@ -120,4 +135,5 @@
         </div>
     </div>
 </body>
+
 </html>

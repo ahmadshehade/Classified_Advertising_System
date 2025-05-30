@@ -3,30 +3,37 @@
 namespace App\Jobs;
 
 use App\Mail\RemoveUserMail;
+use Illuminate\Bus\Queueable as BusQueueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class RemoveUserJob implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use BusQueueable, SerializesModels;
+
     protected $user;
-    /**
-     * Create a new job instance.
-     */
+
     public function __construct($user)
     {
         $this->user = $user;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
-        Mail::to($this->user['email'])->send(
-            new RemoveUserMail((object) $this->user)
-        );
+        try {
+            Mail::to($this->user['email'])->send(
+                new RemoveUserMail((object) $this->user)
+            );
+
+            echo " Email sent to: {$this->user['email']}" . PHP_EOL;
+        } catch (Throwable $e) {
+            Log::error('Fail Send Message',[
+                'user'=>$this->user,
+                'error'=>$e->getMessage()
+            ]);
+        }
     }
 }

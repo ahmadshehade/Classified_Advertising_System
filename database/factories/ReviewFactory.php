@@ -17,8 +17,8 @@ class ReviewFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'ad_id' => Ad::factory(),
+            'user_id' => User::inRandomOrder()->first()->id,
+            'ad_id' => Ad::inRandomOrder()->first()->id,
             'rating' => $this->faker->numberBetween(1, 5), 
             'comment' => $this->faker->optional()->sentence(10),
             'created_at' => now(),

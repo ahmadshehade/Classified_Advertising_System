@@ -6,6 +6,7 @@ use App\Models\Review;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ReviewTableSeeder extends Seeder
 {
@@ -14,8 +15,11 @@ class ReviewTableSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('reviews')->delete();
-        Review::factory(50)->create();
+         Schema::disableForeignKeyConstraints();  
+        DB::table('reviews')->truncate();            
+        Schema::enableForeignKeyConstraints();
+        Review ::factory(22)->create();
+  
 
     }
 }
